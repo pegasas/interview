@@ -1,0 +1,3 @@
+# Zookeeper通知机制
+
+client端会对某个znode建立一个watcher事件，当该znode发生变化时，这些client会收到zk的通知，然后client可以根据znode变化来做出业务上的改变等。
