@@ -1,6 +1,10 @@
-主从选举
+zookeeper主从选举
 zookeeper分布式锁的实现，为什么这样实现，有什么问题，怎么优化
-如何做分布式session
-从ACID到CAP到BASE
-二段协议
+zookeeper如何做分布式session
+zookeeperACID到CAP到BASE
+zookeeper二段协议
 zookeeper缺点
+zookeeper原理
+zookeeper是如何保证一致性的
+zookeeper如何判断session超时，connection超时
+zookeeper如何触发回调

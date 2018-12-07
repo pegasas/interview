@@ -1,11 +1,15 @@
 # java面向对象
 java 多态，形式，应用
-
 # Java类加载
 Java反射 方法区
 线程上下文类加载器
 
 # Java GC
+
+
+# JVM
+## JVM GC
+JVM永久区
 为什么要用老年代和新生代？
 新生代进入老生代的情况？（有三种）
 提前担保机制？
@@ -21,8 +25,6 @@ java内存溢出和解决
 java栈溢出和解决
 年轻代和老年代用的GC收集器
 可达性算法，回收算法，Hotspot虚拟机回收机制，7种收集器。
-
-# JVM
 ## JVM内存模型
 JVM内存划分
 java中的堆和栈
@@ -40,7 +42,8 @@ JVM的调优参数
 
 # ReentrantLock
 
-# Java多线程Thread,Runnable,Callable,Future(FutureTask)
+# Java多线程
+Thread,Runnable,Callable,Future(FutureTask)
 ## 线程状态
 ## 线程交互方式
 
@@ -56,12 +59,13 @@ volatile不线程安全
 volatile实现原理，内存屏障
 
 # Synchronized
-Synchronized和Lock
+Synchronized、Lock、reentrantlock
 synchronized的实现原理
 synchronize对static方法加锁
 可重入锁，synchronize是否可重入
 synchronized在方法上是对象锁还是类锁
 synchronized关键字底层什么命令
+synchronized为什么是非公平的
 
 # Java线程池
 线程池参数，实现原理
@@ -73,7 +77,7 @@ juc的线程池
 # Java atomic
 
 # java集合类
-
+Blockingqueue
 ## ArrayList、LinkedList
 ArrayList和LinkedList底层
 ## HashMap（HashSet） ConcurrentHashMap
@@ -169,6 +173,7 @@ Mapping映射和Mybatis与Struts2的大致区别
 # java BIO/NIO/AIO
 nio与bio的区别。
 nio的实现（没问原理，问原理估计要扯到linux的io模型了）
+## netty
 nio的包装框架netty(从rpc和微服务的角度说了一下。问我有哪些序列化方式。)
 nio和io的区别，nio是阻塞轮询的，如何改用异步通知的机制，我说使用aio注册异步回调函数。
 
@@ -177,7 +182,10 @@ Lambda表达式
 java分布式缓存框架
 java如何做到平台无关
 ==和equels的区别
+
+# java object
 object类equals方法是怎么实现
+
 java 静态代码块与构造方法谁先初始化，答静态代码块，原因
 hashcode怎么重写
 重写equels需要重写hashcode吗，为什么？

@@ -1,72 +1,7 @@
-Linux 进程地址空间。
-linux 进程和线程区别
-linux task_struct有哪些内容
-linux 动态链接的过程
-linux 库打桩机制
-linux mmap、select、waitpid、socket、brk、fork、execve、signal等几个比较常用的系统调用背诵一遍
-linux 页式内存管理
-linux 小页内存模式和大页内存模式
-linux 高速缓存的读策略和写策略
-linux 写通和写回有什么区别？多线程下会产生什么问题？
-linux 高速缓存一般以物理地址编组还是虚拟地址编组？为什么？
-linux 计算机启动的过程
-linux 栈随机化定义和目的
-linux 汇编语言要求call指令和ret指令一定一一对应么？
-linuux inc和add指令有什么区别？
-linux 什么是分支预测？什么是寄存器重命名？线程级并行、数据级并行和指令级并行分别是什么意思？
-linux ELF文件的结构？bss段和data段有什么区别？bss段在文件中如何存储？又以何种方式映射到虚拟内存中？
-linux 分配一块堆内存，用一个指针向后遍历，到何位置触发段错误？为什么？
-HDFS NameNode,DataNode
-NameNode HA(High Availability)
-client和HDFS文件的读写过程，延迟太高解决方案
-zookeeper原理
-zookeeper是如何保证一致性的
-zookeeper如何判断session超时，connection超时
-zookeeper如何触发回调
-yarn的结构
-yarn ResourceManager、NodeManager的交互
-yarn如何分配任务
-yarn在什么层面调度
-kubernetes和mesos区别
-linux内存调度
-linux考虑CPU内存调度
-docket如何实现隔离，Control group和Namespace
-链表排序
-两个栈实现一个队列
-进程和线程区别
-JVM的内存模型(堆，栈)
-JVM永久区，GC
-Java多线程
-Hadoop的MR和Spark有什么区别，为什么Spark有优势
-TCP
-LSTM和GRU的区别
-hadoop的HDFS，Yarn，MapReduce源码讲讲，精确到方法和类
-HDFS client和NameNode的通信过程，和DataNode的通信过程
-HDFS NameNode HA(High Availability)中选举过程，如何防止脑裂，为什么需要fencing，checkpoint的过程，SSH连不上怎么办
-yarn的状态机和epoll
-yarn的公平调度器和容量调度器和FIFO
-yarn抢占
-MapReduce全过程，分片怎么读的，为什么用快排，换别的行不行，多路归并怎么实现的，环形缓冲区怎么实现的。
 大CPU大内存，网卡超烂，如何优化（强制本地化，选高压缩的序列化格式，核心就是尽量减少网络IO）
 一个加载在内存里的HashMap，Key和Value全是int，从硬盘读进来只做查询不做修改，不考虑查询效率，尽可能提高空间效率，稍微考虑一下时间效率。从JVM调优到数据结构到GC到
 实现一个线程池
-spark和hadoop中如何处理数据倾斜。
-spark的调度过程，DAGScheduler如何划分stage，TaskScheduler如何调度任务的。Spark的shuffle是什么样的，怎么优化的。
-Java的多线程
-Java锁
-Java synchronized和reentrantlock的区别
-Java Blockingqueue
-Java volatile
-synchronized为什么是非公平的
-Java Object
-Java collection
-Java NIO
-设计一个RPC框架
-观察者模式
-并发 java collection
 现在有一个RPC框架，需要使用线程池，多次复用socket，TCP，怎么传递命令。变相考hadoop，使用操作码。
-leetcode hard，两个数组，找全局中间数
-问问搜索。
 如何构建倒排索引，如何加速查询
 WAND算法细节。
 倒排索引的log时间合并

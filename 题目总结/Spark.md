@@ -1,2 +1,3 @@
-# spark
-Flink与Spark的区别
+Spark, Storm, Flink区别
+Spark数据倾斜
+spark的调度过程，DAGScheduler如何划分stage，TaskScheduler如何调度任务的。Spark的shuffle是什么样的，怎么优化的

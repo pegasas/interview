@@ -1,0 +1,7 @@
+yarn的结构
+yarn ResourceManager、NodeManager的交互
+yarn如何分配任务
+yarn在什么层面调度
+yarn的状态机和epoll
+yarn的公平调度器和容量调度器和FIFO
+yarn抢占
