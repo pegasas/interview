@@ -71,7 +71,7 @@ a. Using index
 覆盖索引（Covering Index）
 MySQL可以利用索引返回select列表中的字段，而不必根据索引再次读取数据文件
 包含所有满足查询需要的数据的索引称为覆盖索引（Covering Index）
-注意：如果要使用覆盖索引，一定要注意select列表中只取出需要的列，不可select *，因为如果将所有字段一起做索引会导致索引文件过大，查询性能下降
+注意：如果要使用覆盖索引，一定要注意select列表中只取出需要的列，不可select * ，因为如果将所有字段一起做索引会导致索引文件过大，查询性能下降
 
 b. Using where
 表示mysql服务器将在存储引擎检索行后再进行过滤。许多where条件里涉及索引中的列，当（并且如果）它读取索引时，就能被存储引擎检验，因此不是所有带where字句的查询都会显示"Using where"。有时"Using where"的出现就是一个暗示：查询可受益与不同的索引。
@@ -99,7 +99,7 @@ I. Index merges
 当MySQL 决定要在一个给定的表上使用超过一个索引的时候，就会出现以下格式中的一个，详细说明使用的索引以及合并的类型。
 Using sort_union(...)
 Using union(...)
-Using intersect(...) 
+Using intersect(...)
 
 总结：
 • EXPLAIN不会告诉你关于触发器、存储过程的信息或用户自定义函数对查询的影响情况
