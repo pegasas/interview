@@ -6,12 +6,10 @@ LRUCache做查询缓存
 
 spark结构原理
 spark的调优
-JMM
+spark sql
 数据仓库的星型模型和雪花模型，上卷下钻
 Hive
-spark sql
-HTTP，TCP
-操作系统的进程与线程
+
 Java多线程
 Java线程池
 爬虫原理
