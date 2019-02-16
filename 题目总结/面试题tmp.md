@@ -8,28 +8,27 @@ spark结构原理
 spark的调优
 spark sql
 数据仓库的星型模型和雪花模型，上卷下钻
-Hive
-
-Java多线程
-Java线程池
-爬虫原理
-chrome历史记录数据结构以及实现
-Java Collection
-Java多线程
-Java线程池
-java的序列化方式
-hadoop的序列化方式 列式存储Avro 行式存储parquet
-Java transient关键字
-spark的原理
-hadoop设计模式
 spark实现写个业务逻辑
 spark streaming和storm，flink的区别
+
 storm如何处理反压
 storm如何保证流的可靠性的
+
 flink原理
-hbase的row key设计,范围查询value怎么设计
-yarn里面机器崩了，怎么让任务接着算（重启nodemanager重算这个分片，如果这个分片也不想重算呢，接着算，没这功能没说出来。回来想想其实还是应该能说个思路的。
+
+Hive
+
+hadoop的序列化方式 列式存储Avro 行式存储parquet
+hadoop设计模式
 hadoop MRAppMaster的故障怎么实现的HA
+
+爬虫原理
+
+hbase的row key设计,范围查询value怎么设计
+
+yarn里面机器崩了，怎么让任务接着算（重启nodemanager重算这个分片，如果这个分片也不想重算呢，接着算，没这功能没说出来。
+
+
 zookeeper如何选举新的Active Namenode
 大数算法：10亿个int查重，讲思路，布隆过滤，mapreduce，bitmap，算法的复杂度
 线程同步的方式
