@@ -18,9 +18,10 @@ flink原理
 
 Hive
 
-hadoop的序列化方式 列式存储Avro 行式存储parquet
-hadoop设计模式
-hadoop MRAppMaster的故障怎么实现的HA
+hadoop 序列化方式 列式存储Avro 行式存储parquet
+hadoop 设计模式
+hadoop MRAppMaster的故障
+hadoop HA(zookeeper如何选举新的Active Namenode)
 
 爬虫原理
 
@@ -28,21 +29,12 @@ hbase的row key设计,范围查询value怎么设计
 
 yarn里面机器崩了，怎么让任务接着算（重启nodemanager重算这个分片，如果这个分片也不想重算呢，接着算，没这功能没说出来。
 
+10亿个int查重，讲思路，布隆过滤，mapreduce，bitmap，算法的复杂度
 
-zookeeper如何选举新的Active Namenode
-大数算法：10亿个int查重，讲思路，布隆过滤，mapreduce，bitmap，算法的复杂度
-线程同步的方式
-互斥锁与信号量的区别
-如何防止进程饥饿
-cgroup描述
-MQ幂等性，顺序性
+linux cgroup
 高并发请求处理
-限流算法
-RPC注册中心挂了怎么办
-RPC服务端客户端负载均衡
-MYSQL索引类型
-Java new一个对象全部过程
-Spring事务传播属性 隔离级别
+
+MQ幂等性，顺序性
 微信附近的人算法
 c++菱形继承和虚继承
 C++智能指针
@@ -52,7 +44,7 @@ hibernate缓存机制
 Ext2,ext3,ext4
 c++异常堆栈跟踪
 c++多态实现
-gooroutine原理
+goroutine原理
 channel
 Sync.map
 CDN
@@ -78,8 +70,6 @@ Coredump
 hash冲突解决
 segmentfault原因
 CDN
-协程异步进行同步调用
-进程线程协程区别
 无锁数据结构
 stl容器
 Std::sort实现
@@ -90,7 +80,6 @@ Go c共享资源
 一致性哈希 虚拟节点
 Linux Awk Sed Grep
 秒杀系统设计
-Jvm 垃圾回收 垃圾回收器
 Linux文件系统
 计算机层次结构
 Socket
@@ -122,18 +111,10 @@ C++内存区
 菱形继承问题
 引用/指针区别
 Arraylist/linkedlist
-乐观锁如何保证线程安全
 锁种类
 c++内存管理
 Stl map/unordered_map原理与区别
-C++左值引用右值引用
-域名解析成IP地址过程
-URL访问网站时的网络传输
-分布式cap
 cdn
-tcp/ip四层架构 与 OSI七层 对应关系 以及协议
-Get/post
-http、tcp关系
 数据流的中位数
 爬虫url去重
 Bloom filter
@@ -147,30 +128,13 @@ c++11新特性总结
 STL六大组件
 仿函数
 python内存管理
-深浅拷贝
 给你一个整数，如何判断2的n次幂
-排序算法
-STL vector list的底层实现
 HashMap和HashTable区别
 HashMap、Hashtable、ConcurrentHashMap的原理与区别
 倒排索引
-一个圆上三个点形成钝角的概率是多少？
-死锁产生的四个必要条件
-进程线程优缺点
-进程通信方式
-常用设计模式
-malloc和new的区别
-进程状态
-c++内存管理
-TCP三次握手和四次挥手
-java线程池
+一个圆上三个点形成钝角的概率
 Java String底层实现
 Java Finally
-事务的隔离性
-主键、唯一索引区别
-innoDB和MyISAM区别
-最左前缀
-不会使用索引情况
 hashcode作用
 大端小端的区别、应用
 写程序判断大端小端
@@ -197,15 +161,11 @@ CountDownLatch
 操作系统的进程通信方式
 僵尸进程和孤儿进程是什么
 如何避免僵尸进程(我说让父进程显示通知，那父进程怎么知道子进程结束了，答不会)
-计算机网络TCP和UDP有什么区别
 为什么迅雷下载是基于UDP的
-操作系统的死锁必要条件，如何避免死锁。
 写一个LRU的缓存，需要完成超时淘汰和LRU淘汰
 Django和其他框架的大致区别
 为什么选用Django
 Django的请求响应流程
-MySQL存储引擎有哪些
-为什么选用Innodb
 Linux查看进程使用
 僵尸进程,孤儿进程
 一个进程你一般关注什么量
@@ -213,7 +173,6 @@ python装饰器
 gevent
 协程
 两个栈实现队列
-TCP为什么要进行四次挥手
 反爬策略哪些
 如何实现需要登录的网站爬取
 session 和 cookie 的区别
@@ -221,9 +180,6 @@ session 和 cookie 的区别
 中间人攻击的发生场景
 java反射
 Spring IOC,AOP,注解
-JVM
-序列化，反序列化
-如何对一个对象序列化
 线程，多线程，如何创建，有哪些方法
 设计模式、单例模式，装饰模式
 进程间通信方式
@@ -233,17 +189,10 @@ TCP握手
 HashMap&ConcurrentHashMap
 乐观锁&悲观锁
 可重入锁&Synchronize
-事务ACID
-分布式事务的二段提交机制
-聚簇索引&非聚簇索引
 索引的使用场景
 当前读&快照读
-Java类加载过程
-Java双亲委派机制及使用原因
-JavaGC算法
 Http&Https的区别
 Https的加密方式
-线程池的核心参数和基本原理
 线程池的调优策略 
 策略模式
 Collections.sort底层排序方式

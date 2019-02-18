@@ -12,7 +12,6 @@ hadoop2.0的HA机制官方介绍了有2种方式:
 
 ![avatar][HA机制概述]
 
-
 # 基本原理 
 
 hadoop2.0的HA 机制有两个namenode，一个是active namenode，状态是active；另外一个是standby namenode，状态是standby。两者的状态是可以切换的，但不能同时两个都是active状态，最多只有1个是active状态。只有active namenode提供对外的服务，standby namenode是不对外服务的。active namenode和standby namenode之间通过NFS或者JN（journalnode，QJM方式）来同步数据。
