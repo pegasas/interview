@@ -34,16 +34,9 @@ yarn里面机器崩了，怎么让任务接着算（重启nodemanager重算这�
 linux cgroup
 高并发请求处理
 
-MQ幂等性，顺序性
 微信附近的人算法
-c++菱形继承和虚继承
-C++智能指针
-Linux监听端口
 hibernate缓存机制
-主从复制延迟怎么解决
-Ext2,ext3,ext4
-c++异常堆栈跟踪
-c++多态实现
+ext2,ext3,ext4
 goroutine原理
 channel
 Sync.map
