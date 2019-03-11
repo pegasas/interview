@@ -475,9 +475,11 @@ typedef struct _rio rio;
 ## 5 Redis持久化RDB && AOF
 
 RDB持久化：fork一个进程，遍历hash table，利用copy on write，把整个db dump保存下来。
+RDB持久化机制，对Redis中的数据执行周期性的持久化。
 粒度比较大，如果之前crash了，则中间的操作没办法恢复。
 
 AOF持久化：对数据的每一条修改命令追加到aof文件
+AOF机制对每条写入命令作为日志，以append-only的模式写入一个日志文件中，在redis重启的时候，可以通过回放AOF日志中的写入指令来重新构建整个数据集。
 粒度较小，crash之后，只有crash之前没有来得及做日志的操作没办法恢复。
 
 ## 6 Redis事件处理
@@ -598,9 +600,9 @@ redis采用量乐观复制策略，容忍在一定时间内主从数据内容是
 
 ### 9.1 redis复制演进
 
-redis版本<=2.6<2.8,复制采用sync命令，无论是第一次主从复制还是断线重连进行复制都采用全量复制；
-2.8<=redis版本<4.0,复制采用psync，从redis2.8开始，redis复制从sync过渡到psync，这一特性主要添加了redis在断线重新时候可使用部分复制；
-redis版本>=4.0，也采用psync，相比与2.8版本的psync优化了增量复制，这里我们称为psync2，2.8版本的psync称为psync1。
+2.8 版本之前 Redis 复制采用 sync 命令，无论是第一次主从复制还是断线重连后再进行复制都采用全量同步，成本高
+2.8 ~ 4.0 之间复制采用 psync 命令，这一特性主要添加了 Redis 在断线重连时候可通过 offset 信息使用部分同步
+4.0 版本之后也采用 psync，相比于 2.8 版本的 psync 优化了增量复制，这里我们称为 psync2，2.8 版本的 psync 可以称为 psync1, psync2 最大的变化支持两种场景下的部分重同步，一个场景是 slave 提升为 master 后，其他 slave 可以从新提升的 master 进行部分重同步，这里需要 slave 默认开启复制积压缓冲区；另外一个场景就是 slave 重启后，可以进行部分重同步。这里要注意和 psync1 的运行 ID 相比，这里的复制 ID 有不一样的意义。
 
 ## 10 Redis Sentinel
 
