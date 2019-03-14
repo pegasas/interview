@@ -82,7 +82,39 @@ epoll其实也需要调用epoll_wait不断轮询就绪链表，期间也可能�
 
 （2）select，poll每次调用都要把fd集合从用户态往内核态拷贝一次，并且要把current往设备等待队列中挂一次，而epoll只要一次拷贝，而且把current往等待队列上挂也只挂一次（在epoll_wait的开始，注意这里的等待队列并不是设备等待队列，只是一个epoll内部定义的等待队列）。这也能节省不少的开销。
 
-### 4.1 水平触发(LT) & 边缘触发(ET)
+### 4.1 select && poll
+
+单个进程就可以同时处理多个网络连接的io请求（同时阻塞多个io操作）。基本原理就是程序呼叫select，然后整个程序就阻塞了，这时候，kernel就会轮询检查所有select负责的fd，当找到一个client中的数据准备好了，select就会返回，这个时候程序就会系统调用，将数据从kernel复制到进程缓冲区。
+
+### 4.2 poll
+
+poll的原理与select非常相似，差别如下：
+
+描述fd集合的方式不同，poll使用 pollfd 结构而不是select结构fd_set结构，所以poll是链式的，没有最大连接数的限制
+poll有一个特点是水平触发，也就是通知程序fd就绪后，这次没有被处理，那么下次poll的时候会再次通知同个fd已经就绪。
+
+### 4.3 epoll
+
+epoll 提供了三个函数：
+
+int epoll_create(int size);
+建立一個 epoll 对象，并传回它的id
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+事件注册函数，将需要监听的事件和需要监听的fd交给epoll对象
+int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+等待注册的事件被触发或者timeout发生
+
+epoll解决的问题：
+
+(1)epoll没有fd数量限制
+epoll没有这个限制，我们知道每个epoll监听一个fd，所以最大数量与能打开的fd数量有关，一个g的内存的机器上，能打开10万个左右
+
+(2)epoll不需要每次都从user space 将fd set复制到内核kernel
+epoll在用epoll_ctl函数进行事件注册的时候，已经将fd复制到内核中，所以不需要每次都重新复制一次
+
+(3)select 和 poll 都是主動輪詢機制，需要拜訪每一個 FD；epoll是被动触发方式，给fd注册了相应事件的时候，我们为每一个fd指定了一个回调函数，当数据准备好之后，就会把就绪的fd加入一个就绪的队列中，epoll_wait的工作方式实际上就是在这个就绪队列中查看有没有就绪的fd，如果有，就唤醒就绪队列上的等待者，然后调用回调函数。
+
+### 4.3 水平触发(LT) & 边缘触发(ET)
 
 水平触发(LT)模式：当epoll_wait检测到描述符事件发生并将此事件通知应用程序，应用程序可以不立即处理该事件。下次调用epoll_wait时，会再次响应应用程序并通知此事件。
 
