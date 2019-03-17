@@ -714,8 +714,6 @@ public class StaticGenerator<T> {
 
 另一方面<?>表示了非限定通配符，因为<?>可以用任意类型来替代。
 
-
-
 ```
 public void showKeyValue1(Generic<? extends Number> obj){
     Log.d("泛型测试","key value is " + obj.getKey());
