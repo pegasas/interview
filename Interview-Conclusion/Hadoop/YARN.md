@@ -18,93 +18,25 @@ Hive将元数据(表的名称，表的列和分区及其属性，表的数据所
 
 ## 2 hive4种基本表类型
 
-内部表：数据存储在Hive的数据仓库目录下，删除表时，除了删除元数据，还会删除实际表文件。
-外部表：数据并不存储在Hive的数据仓库目录下，删除表时，只是删除元数据，并不删除实际表文件。
-分区表：跟RDMS的分区概念类似，将一张表的数据按照分区规则分成多个目录存储。这样可以通过指定分区来提高查询速度。
-桶表：在表或分区的基础上，按某一列的值将记录进行分桶存放，即分文件存放，也就是将大表变成小表的意思，这样，涉及到Join操作时，可以在桶与桶间关联即可，大大减小Join的数据量，提高执行效率
-
-### 2.1 内部表 && 外部表
-
-创建表时：创建内部表时，会将数据移动到数据仓库指向的路径；若创建外部表，仅记录数据所在的路径， 不对数据的位置做任何改变。
-删除表时：在删除表的时候，内部表的元数据和数据会被一起删除， 而外部表只删除元数据，不删除数据。这样外部表相对来说更加安全些，数据组织也更加灵活，方便共享源数据。
-
-### 2.2 分区 & 分桶
-
-分区
-
-是指按照数据表的某列或某些列分为多个区，区从形式上可以理解为文件夹，比如我们要收集某个大型网站的日志数据，一个网站每天的日志数据存在同一张表上，由于每天会生成大量的日志，导致数据表的内容巨大，在查询时进行全表扫描耗费的资源非常多。
-那其实这个情况下，我们可以按照日期对数据表进行分区，不同日期的数据存放在不同的分区，在查询时只要指定分区字段的值就可以直接从该分区查找
-
-分桶
-
-分桶是相对分区进行更细粒度的划分。
-分桶将整个数据内容安装某列属性值得hash值进行区分，如要按照name属性分为3个桶，就是对name属性值的hash值对3取摸，按照取模结果对数据分桶。
-如取模结果为0的数据记录存放到一个文件，取模为1的数据存放到一个文件，取模为2的数据存放到一个文件
-
+内部表、外部表、分区表、桶表
 
 ## 3 Hive4种排序
 
 order by //可以指定desc 降序 asc 升序
-
 order by会对输入做全局排序，因此只有一个Reducer(多个Reducer无法保证全局有序)，然而只有一个Reducer，会导致当输入规模较大时，消耗较长的计算时间。
 
 sort by 【对分区内的数据进行排序】
-
-sort by不是全局排序，其在数据进入reducer前完成排序，因此，如果用sort by进行排序，并且设置mapred.reduce.tasks>1，则sort by只会保证每个reducer的输出有序，并不保证全局有序。sort by不同于order by，sort by的数据只能保证在同一个reduce中的数据可以按指定字段排序。使用sort by你可以指定执行的reduce个数(通过set mapred.reduce.tasks=n来指定)，对输出的数据再执行归并排序，即可得到全部结果。
+sort by不是全局排序，其在数据进入reducer前完成排序，因此，如果用sort by进行排序，并且设置mapred.reduce.tasks>1，则sort by只会保证每个reducer的输出有序，并不保证全局有序。sort by不同于order by，它不受Hive.mapred.mode属性的影响，sort by的数据只能保证在同一个reduce中的数据可以按指定字段排序。使用sort by你可以指定执行的reduce个数(通过set mapred.reduce.tasks=n来指定)，对输出的数据再执行归并排序，即可得到全部结果。
 
 distribute by 【对map输出进行分区】
-
 distribute by是控制在map端如何拆分数据给reduce端的。hive会根据distribute by后面列，对应reduce的个数进行分发，默认是采用hash算法。sort by为每个reduce产生一个排序文件。在有些情况下，你需要控制某个特定行应该到哪个reducer，这通常是为了进行后续的聚集操作。distribute by刚好可以做这件事。因此，distribute by经常和sort by配合使用。
 
 cluster by
-
 cluster by除了具有distribute by的功能外还兼具sort by的功能。当distribute by和sort by 是同一个字段的时候可以使用cluster by替代。但是排序只能是倒叙排序，不能指定排序规则为ASC或者DESC。
 
 ## 4 数据倾斜
 
-对于普通的join操作，会在map端根据key的hash值，shuffle到某一个reduce上去，在reduce端做join连接操作，内存中缓存join左边的表，遍历右边的表，依次做join操作。所以在做join操作时候，将数据量多的表放在join的右边。
-
-当数据量比较大，并且key分布不均匀，大量的key都shuffle到一个reduce上了，就出现了数据的倾斜。
-
-常见的数据倾斜出现在group by和join..on..语句中。
-
-join（数据倾斜）
-
-在进行两个表join的过程中，由于hive都是从左向右执行，要注意讲小表在前，大表在后（小表会先进行缓存）。
-
-map/reduce程序执行时，reduce节点大部分执行完毕，但是有一个或者几个reduce节点运行很慢，导致整个程序的处理时间很长，这是因为某一个key的条数比其他key多很多（有时是百倍或者千倍之多），这条key所在的reduce节点所处理的数据量比其他节点就大很多，从而导致某几个节点迟迟运行不完，此称之为数据倾斜。hive在跑数据时经常会出现数据倾斜的情况，使的作业经常reduce完成在99%后一直卡住，最后的１%花了几个小时都没跑完，这种情况就很可能是数据倾斜的原因
-
-### 4.1 解决
-
-生成的查询计划会有两个MRJob。
-第一个MRJob 中，Map的输出结果集合会随机分布到Reduce中，每个Reduce做部分聚合操作，并输出结果，这样处理的结果是相同的GroupBy Key
-有可能被分发到不同的Reduce中，从而达到负载均衡的目的；
-第二个MRJob再根据预处理的数据结果按照GroupBy Key分布到Reduce中（这个过程可以保证相同的GroupBy Key被分布到同一个Reduce中），最后完成最终的聚合操作。
-
-## 5 hive 3种join
-
-### 5.1 Map-side Join
-
-mapJoin的主要意思就是，当链接的两个表是一个比较小的表和一个特别大的表的时候，我们把比较小的table直接放到内存中去，然后再对比较大的表格进行map操作。join就发生在map操作的时候，每当扫描一个大的table中的数据，就要去去查看小表的数据，哪条与之相符，继而进行连接。这里的join并不会涉及reduce操作。map端join的优势就是在于没有shuffle
-
-### 5.2 Reduce-side Join
-
-***hive join操作默认使用的就是reduce join
-
-Reduce-side Join原理上要简单得多，它也不能保证相同key但分散在不同dataset中的数据能够进入同一个Mapper，整个数据集合的排序
-在Mapper之后的shuffle过程中完成。相对于Map-side Join，它不需要每个Mapper都去读取所有的dataset，这是好处，但也有坏处，
-即这样一来Mapper之后需要排序的数据集合会非常大，因此shuffle阶段的效率要低于Map-side Join。
-
-***reduce side join是一种最简单的join方式，其主要思想如下：
-在map阶段，map函数同时读取两个文件File1和File2，为了区分两种来源的key/value数据对，对每条数据打一个标签（tag）
-
-semi join 小表对大表 是reudce join的变种 map阶段过滤掉不需要join的字段 相当于Hivw SQL加的where过滤
-
-### 5.3 SMB Join（sort merge bucket）
-
-SMB 存在的目的主要是为了解决大表与大表间的 Join 问题，分桶其实就是把大表化成了“小表”，然后 Map-Side Join 解决之，这是典型的分而治之的思想。
-
-## 6 hive优化
+## 5 3种常见的join
 
 
 
