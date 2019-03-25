@@ -155,6 +155,8 @@ IdentityHashMap也是无序的，并且该类不是线程安全的。
 
 ArrayList可以简单的看作是动态数组，相对于普通的数组它可以动态的增加容量或者减少容量。要注意的是ArrayList并不是线程安全的，因此一般建议在单线程中使用ArrayList。
 
+ArrayList扩容的本质就是计算出新的扩容数组的size后实例化，并将原有数组内容复制到新数组中去。
+
 ### 4.11 ArrayDeque
 
 ArrayDeque 是 Deque 接口的一种具体实现，是依赖于循环队列来实现的。ArrayDeque 没有容量限制，可根据需求自动进行扩容。ArrayDeque不支持值为 null 的元素。
