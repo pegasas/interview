@@ -237,6 +237,43 @@ ISR认为对于2f+1个副本来说，多数投票机制要求最多只能允许f
 
 ISR的运行机制如下：将所有次级副本数据分到两个集合，其中一个被称为ISR集合，这个集合备份数据的特点是即时和主副本数据保持一致，而另外一个集合的备份数据允许其消息队列落后于主副本的数据。在做主备切换时，只允许从ISR集合中选择主副本，只有ISR集合内所有备份都写成功才能认为这次写入操作成功。在具体实现时，kafka利用zookeeper来保持每个ISR集合的信息，当ISR集合内成员变化时，相关构件也便于通知。通过这种方式，如果设定ISR集合大小为f+1，那么可以最多允许f个副本故障，而对于多数投票机制来说，则需要2f+1个副本才能达到相同的容错性。
 
+### 2.6 ZAB协议
+
+#### 2.6.1 消息广播模式
+
+zookeeper采用ZAB协议的核心就是只要有一台服务器提交了proposal，就要确保所有的服务器最终都能正确提交proposal。这也是CAP/BASE最终实现一致性的一个体现。
+
+(1)客户端发起一个写操作请求
+
+(2)Leader服务器将客户端的request请求转化为事物proposal提案，同时为每个proposal分配一个全局唯一的ID，即ZXID。
+
+(3)leader服务器与每个follower之间都有一个队列，leader将消息发送到该队列
+
+(4)follower机器从队列中取出消息处理完(写入本地事物日志中)毕后，向leader服务器发送ACK确认。
+
+(5)leader服务器收到半数以上的follower的ACK后，即认为可以发送commit
+
+(6)leader向所有的follower服务器发送commit消息
+
+#### 2.6.2 崩溃恢复
+
+确保已经被leader提交的proposal必须最终被所有的follower服务器提交。
+确保丢弃已经被leader出的但是没有被提交的proposal。
+
+leader服务器发生崩溃时分为如下场景：
+
+(1)leader在提出proposal时未提交之前崩溃，则经过崩溃恢复之后，新选举的leader一定不能是刚才的leader。因为这个leader存在未提交的proposal。新选举出来的leader不能包含未提交的proposal，即新选举的leader必须都是已经提交了的proposal的follower服务器节点。同时，新选举的leader节点中含有最高的ZXID。这样做的好处就是可以避免了leader服务器检查proposal的提交和丢弃工作。
+
+(2)leader在发送commit消息之后，崩溃。即消息已经发送到队列中。经过崩溃恢复之后，参与选举的follower服务器(刚才崩溃的leader有可能已经恢复运行，也属于follower节点范畴)中有的节点已经是消费了队列中所有的commit消息。即该follower节点将会被选举为最新的leader。剩下动作就是数据同步过程。
+
+#### 2.6.3 数据同步
+
+在zookeeper集群中新的leader选举成功之后，leader会将自身的提交的最大proposal的事物ZXID发送给其他的follower节点。follower节点会根据leader的消息进行回退或者是数据同步操作。最终目的要保证集群中所有节点的数据副本保持一致。
+
+数据同步完之后，zookeeper集群如何保证新选举的leader分配的ZXID是全局唯一呢？这个就要从ZXID的设计谈起。
+
+ZXID是一个长度64位的数字，其中低32位是按照数字递增，即每次客户端发起一个proposal,低32位的数字简单加1。高32位是leader周期的epoch编号，，每当选举出一个新的leader时，新的leader就从本地事物日志中取出ZXID,然后解析出高32位的epoch编号，进行加1，再将低32位的全部设置为0。这样就保证了每次新选举的leader后，保证了ZXID的唯一性而且是保证递增的。
+
 ## 3 ZooKeeper应用场景
 
 ### 3.1 发布/订阅
