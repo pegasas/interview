@@ -22,7 +22,7 @@ P：一个P和一个M进行绑定，代表在这个OS Thread上的调度器
 
 图中灰色的那些goroutine并没有运行，而是出于ready的就绪态，正在等待被调度。
 
-P维护着这个队列（称之为runqueue），Go语言里，启动一个goroutine很容易：go function 就行，所以每有一个go语句被执行，runqueue队列就在其末尾加入一个goroutine，在下一个调度点，就从runqueue中取出（如何决定取哪个goroutine？）一个goroutine执行。
+启动一个goroutine，runqueue队列就在其末尾加入一个goroutine，在下一个调度点，就从runqueue中取出一个goroutine执行。
 
 为何要维护多个上下文P？因为当一个OS线程被阻塞时，P可以转而投奔另一个OS线程！图中看到，当一个OS线程M0陷入阻塞时，P转而在OS线程M1上运行。调度器保证有足够的线程来运行所以的context P。
 
