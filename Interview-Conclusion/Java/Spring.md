@@ -14,12 +14,42 @@
 
 工厂模式+反射机制
 
+Spring通过反射机制利用bean的class属性指定实现类来实例化bean
+
+通过工厂模式调用FactoryBean的接口方法返回object
+
 IOC容器看作是一个工厂，这个工厂里要生产的对象都在配置文件中给出定义，然后利用编程语言提供的反射机制，根据配置文件中给出的类名生成相应的对象。
 
 ### 1.3 IOC（依赖注入）方式
 
 构造器依赖注入：构造器依赖注入通过容器触发一个类的构造器来实现的，该类有一系列参数，每个参数代表一个对其他类的依赖。
 Setter方法注入：Setter方法注入是容器通过调用无参构造器或无参static工厂 方法实例化bean之后，调用该bean的setter方法，即实现了基于setter的依赖注入。
+
+### 1.4 Spring循环依赖
+
+循环依赖就是循环引用，就是两个或多个Bean相互之间的持有对方，比如CircleA引用CircleB，CircleB引用CircleC，CircleC引用CircleA，则它们最终反映为一个环。此处不是循环调用，循环调用是方法之间的环调用。
+
+循环调用是无法解决的，除非有终结条件，否则就是死循环，最终导致内存溢出错误。
+
+#### 1.4.1 构造器循环依赖
+
+表示通过构造器注入构成的循环依赖，此依赖是无法解决的，只能抛出BeanCurrentlyInCreationException异常表示循环依赖。
+
+如在创建CircleA类时，构造器需要CircleB类，那将去创建CircleB，在创建CircleB类时又发现需要CircleC类，则又去创建CircleC，最终在创建CircleC时发现又需要CircleA；从而形成一个环，没办法创建。
+
+Spring容器将每一个正在创建的Bean 标识符放在一个“当前创建Bean池”中，Bean标识符在创建过程中将一直保持在这个池中，因此如果在创建Bean过程中发现自己已经在“当前创建Bean池”里时将抛出BeanCurrentlyInCreationException异常表示循环依赖；而对于创建完毕的Bean将从“当前创建Bean池”中清除掉。
+
+#### 1.4.2 setter循环依赖
+
+表示通过setter注入方式构成的循环依赖。
+
+对于setter注入造成的依赖是通过Spring容器提前暴露刚完成构造器注入但未完成其他步骤（如setter注入）的Bean来完成的，而且只能解决单例作用域的Bean循环依赖。
+
+通过提前暴露一个单例工厂方法，从而使其他Bean能引用到该Bean。
+
+#### 1.4.3 prototype范围的依赖处理
+
+对于"prototype"作用域bean，Spring容器无法完成依赖注入，因为Spring容器不进行缓存"prototype"作用域的bean，因此无法提前暴露一个创建中的bean。
 
 ## 2 Spring AOP
 
